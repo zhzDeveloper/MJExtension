@@ -42,7 +42,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
     cachedPropertiesDict_ = [NSMutableDictionary dictionary];
 }
 
-+ (NSMutableDictionary *)dictForKey:(const void *)key
++ (NSMutableDictionary *)mj_dictForKey:(const void *)key
 {
     @synchronized (self) {
         if (key == &MJReplacedKeyFromPropertyNameKey) return replacedKeyFromPropertyNameDict_;
@@ -137,7 +137,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
 + (void)mj_enumerateProperties:(MJPropertiesEnumeration)enumeration
 {
     // 获得成员变量
-    NSArray *cachedProperties = [self properties];
+    NSArray *cachedProperties = [self mj_properties];
     
     // 遍历成员变量
     BOOL stop = NO;
@@ -148,9 +148,9 @@ static NSMutableDictionary *cachedPropertiesDict_;
 }
 
 #pragma mark - 公共方法
-+ (NSMutableArray *)properties
++ (NSMutableArray *)mj_properties
 {
-    NSMutableArray *cachedProperties = [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
+    NSMutableArray *cachedProperties = [self mj_dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)];
     
     if (cachedProperties == nil) {
         cachedProperties = [NSMutableArray array];
@@ -175,7 +175,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
             free(properties);
         }];
         
-        [self dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
+        [self mj_dictForKey:&MJCachedPropertiesKey][NSStringFromClass(self)] = cachedProperties;
     }
     
     return cachedProperties;
@@ -214,7 +214,7 @@ static NSMutableDictionary *cachedPropertiesDict_;
 {
     [self mj_setupBlockReturnValue:objectClassInArray key:&MJObjectClassInArrayKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self mj_dictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 #pragma mark - key配置
@@ -222,14 +222,14 @@ static NSMutableDictionary *cachedPropertiesDict_;
 {
     [self mj_setupBlockReturnValue:replacedKeyFromPropertyName key:&MJReplacedKeyFromPropertyNameKey];
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self mj_dictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 
 + (void)mj_setupReplacedKeyFromPropertyName121:(MJReplacedKeyFromPropertyName121)replacedKeyFromPropertyName121
 {
     objc_setAssociatedObject(self, &MJReplacedKeyFromPropertyName121Key, replacedKeyFromPropertyName121, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    [[self dictForKey:&MJCachedPropertiesKey] removeAllObjects];
+    [[self mj_dictForKey:&MJCachedPropertiesKey] removeAllObjects];
 }
 @end
 
